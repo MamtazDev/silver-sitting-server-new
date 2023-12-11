@@ -24,7 +24,7 @@ const addNewContanctMessage = async (req, res) => {
 
 const getAllMakeContactMessages = async (req, res) => {
   try {
-    const allMessages = await MakeContact.find({});
+    const allMessages = await MakeContact.find({}).sort({ createdAt: "desc" });
     res.send(allMessages);
   } catch (err) {
     res.status(500).send({
@@ -33,7 +33,25 @@ const getAllMakeContactMessages = async (req, res) => {
   }
 };
 
+const deleteMakeContactMessages = async (req, res) => {
+  try {
+    const result = await MakeContact.deleteOne({ _id: req.params.id });
+    res.status(200).json({
+      success: true,
+      message: "Contact Message Delete Successful!",
+      data: result,
+    });
+  } catch (error) {
+    res.status(201).json({
+      success: false,
+      message: "Contact Message Delete Failed!",
+      error_message: error.message,
+    });
+  }
+};
+
 module.exports = {
   addNewContanctMessage,
   getAllMakeContactMessages,
+  deleteMakeContactMessages,
 };

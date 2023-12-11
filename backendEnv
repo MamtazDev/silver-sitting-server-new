@@ -1,0 +1,11 @@
+DATABASE_USER=mamtazfreelancer
+DATABASE_PASSWORD=f7FcczeDomuZ5F3L
+
+ACCESS_TOKEN_SECRET=271a933ba4fdfa9d5d3e79bebc2446903c3ddf7682674b044da14f9970c402e4bb36b988dda044934a47c035adf31f275f2b6a7e57aa283f3e9a9db48f73693d
+
+NODEMAILER_GMAIL_USER=mohi.opediatech@gmail.com
+NODEMAILER_GMAIL_PASSWORD=eeatxleehfjhuahr
+
+# MAINWEBSITE_URL=https://silversitting.vercel.app/
+MAINWEBSITE_URL=http://localhost:3000
+SERVER_URL=https://silver-backend-demo.onrender.com
