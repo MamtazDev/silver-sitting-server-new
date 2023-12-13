@@ -10,8 +10,7 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
       required: false,
-      default:
-        "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg",
+      default: "https://i.ibb.co/R4xHYJy/menIcon.png",
     },
     firstName: {
       type: String,

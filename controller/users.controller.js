@@ -28,8 +28,9 @@ const registerUser = async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        gender: req.body.gender,
         postCode: req.body.postCode,
-        residance: req.body.residance,
+        residance: req.body.residence,
         password: bcrcypt.hashSync(req.body.password),
       });
       const user = await newUser.save();
@@ -127,7 +128,7 @@ const editUser = async (req, res) => {
     firstName,
     lastName,
     postCode,
-    residance,
+    residence,
     gender,
     availability,
     offerProvide,
@@ -145,7 +146,7 @@ const editUser = async (req, res) => {
       user.firstName = firstName;
       user.lastName = lastName;
       user.postCode = postCode;
-      user.residance = residance;
+      user.residance = residence;
       user.streetOrHouseNumber = streetOrHouseNumber;
       user.gender = gender;
       user.availability = availability;
@@ -261,7 +262,6 @@ const changeParentSerch = async (req, res) => {
   try {
     const user = User.findById(req.params.id);
     if (user) {
-
       const result = await User.updateOne(
         { _id: req.params.id },
         {

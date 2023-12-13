@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const pdfSchema = new mongoose.Schema({
   pdf: {
@@ -10,12 +10,12 @@ const pdfSchema = new mongoose.Schema({
     required: true,
   },
   user: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
 });
 
-const PdfModel = mongoose.model('Pdf', pdfSchema);
+const PdfModel = mongoose.model("Pdf", pdfSchema);
 
 module.exports = PdfModel;
