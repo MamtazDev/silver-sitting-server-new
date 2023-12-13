@@ -237,7 +237,6 @@ const uploadDocuments = async (req, res) => {
         {
           $set: {
             url: req.body.url,
-            parentSearch: req.body.parentSearch,
           },
         }
       );

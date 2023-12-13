@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
+const multer = require('multer');
 
 const usersRoutes = require("./routes/usersRoutes");
 const makeContactRoutes = require("./routes/makeContactRoutes");
@@ -20,6 +21,7 @@ connectDB();
 
 const http = require("http");
 const socketIo = require("socket.io");
+const PdfModel = require("./models/pdf.model");
 const server = http.createServer(app);
 
 // _____________ Socket Start _____________
@@ -91,4 +93,56 @@ app.get("/", (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
+});
+
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+
+
+
+
+
+app.post('/upload', upload.single('pdf'), async (req, res) => {
+  try {
+    const newPdf = new PdfModel({
+      pdf: req.file.buffer,
+      contentType: req.file.mimetype,
+      user: req.body.user
+    });
+
+    console.log("req.file.user:", req.body.user )
+
+    await newPdf.save();
+
+    res.status(201).json({ message: 'File uploaded successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get('/pdf/:id', async (req, res) => {
+  try {
+    const pdf = await PdfModel.findById(req.params.id);
+
+    if (!pdf) {
+      return res.status(404).json({ message: 'PDF not found' });
+    }
+
+    res.setHeader('Content-Type', pdf.contentType);
+    res.send(pdf.pdf);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get('/pdf', async (req, res) => {
+  try {
+    const pdfs = await PdfModel.find();
+    res.status(200).json( pdfs);
+  } catch (error) {
+    console.error('Error fetching PDFs:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
