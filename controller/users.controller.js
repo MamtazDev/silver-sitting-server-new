@@ -258,6 +258,37 @@ const uploadDocuments = async (req, res) => {
     });
   }
 };
+const changeParentSerch = async (req, res) => {
+  try {
+    const user = User.findById(req.params.id);
+    if (user) {
+
+      const result = await User.updateOne(
+        { _id: req.params.id },
+        {
+          $set: {
+            parentSearch: req.body.parentSearch,
+          },
+        }
+      );
+
+      res.status(200).send({
+        message: "Parent search status updated successfully!",
+        success: true,
+      });
+    } else {
+      res.status(401).send({
+        message: "There is no such user",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
 
 const resendActivationLink = async (req, res) => {
   try {
@@ -326,4 +357,5 @@ module.exports = {
   uploadDocuments,
   resendActivationLink,
   changePassword,
+  changeParentSerch,
 };

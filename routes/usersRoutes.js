@@ -10,6 +10,7 @@ const {
   uploadDocuments,
   resendActivationLink,
   changePassword,
+  changeParentSerch,
 } = require("../controller/users.controller");
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.put("/changePassword", changePassword);
 router.get("/", getAllUsers);
 router.delete("/delete/:id", deleteUser);
 router.put("/upload/:id", uploadDocuments);
+router.put("/searchStatus/:id", changeParentSerch);
 router.put("/edit/:id", editUser);
 router.get("/:id", getUser);
 router.get("/verify/:email", emailVirification);

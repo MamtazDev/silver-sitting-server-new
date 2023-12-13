@@ -11,7 +11,7 @@ const searchChildCarer = async (req, res) => {
 
   const searchMaxDistance = maxDistance ? Number(maxDistance) : 30;
 
-  const filtering = [{ $match: { role: "childcarer" } }];
+  const filtering = [{ $match: { role: "childcarer", parentSearch: true } }];
 
   if (gender) {
     filtering.push({ $match: { gender: gender } });
