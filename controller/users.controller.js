@@ -285,6 +285,36 @@ const resendActivationLink = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+
+    if (user) {
+      const newPassword = bcrcypt.hashSync(password);
+
+      user.password = newPassword;
+
+      await user.save();
+
+      res.status(200).send({
+        message: "Password updated successfully!",
+        success: true,
+      });
+    } else {
+      res.status(201).send({
+        message: "Password update failed!",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   emailVirification,
@@ -295,4 +325,5 @@ module.exports = {
   editUser,
   uploadDocuments,
   resendActivationLink,
+  changePassword,
 };
