@@ -79,6 +79,15 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    isVolunteer: {
+      type: Boolean,
+      default: false,
+    },
+    documentStatus: {
+      type: String,
+      enum: ["not-uploaded", "uploaded", "accepted", "rejected"],
+      default: "not-uploaded",
+    },
   },
   {
     timestamps: true,

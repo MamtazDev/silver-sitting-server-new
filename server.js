@@ -11,6 +11,7 @@ const searchRoute = require("./routes/searchRoute");
 const conversationRoutes = require("./routes/conversationRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const blogRoutes = require("./routes/blog.routes");
+const pdfRoutes = require("./routes/pdfRoutes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ connectDB();
 const http = require("http");
 const socketIo = require("socket.io");
 const PdfModel = require("./models/pdf.model");
+const User = require("./models/users.model");
 const server = http.createServer(app);
 
 // _____________ Socket Start _____________
@@ -86,6 +88,7 @@ app.use("/api/search", searchRoute);
 app.use("/api/conversation", conversationRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/pdf", pdfRoutes);
 
 app.get("/", (req, res) => {
   res.send("Sever is running");
@@ -106,9 +109,22 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       user: req.body.user,
     });
 
-    console.log("req.file.user:", req.body.user);
+    // console.log("req.file.user:", req.body.user);
 
     await newPdf.save();
+
+    const user = await User.findById(req.body.user);
+
+    if (user) {
+      const result = await User.updateOne(
+        { _id: req.body.user },
+        {
+          $set: {
+            documentStatus: "uploaded",
+          },
+        }
+      );
+    }
 
     res.status(201).json({ message: "File uploaded successfully" });
   } catch (error) {
@@ -133,7 +149,9 @@ app.get("/pdf/:id", async (req, res) => {
 
 app.get("/pdf", async (req, res) => {
   try {
-    const pdfs = await PdfModel.find().populate("user");
+    const pdfs = await PdfModel.find()
+      .sort({ createdAt: "desc" })
+      .populate("user");
     res.status(200).json(pdfs);
   } catch (error) {
     console.error("Error fetching PDFs:", error);

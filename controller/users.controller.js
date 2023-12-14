@@ -1,6 +1,10 @@
 const User = require("../models/users.model");
 const bcrcypt = require("bcryptjs");
-const { generateToken, sendVerificationEmail } = require("../utils/auth");
+const {
+  generateToken,
+  sendVerificationEmail,
+  sendResetPassEmail,
+} = require("../utils/auth");
 
 const registerUser = async (req, res) => {
   try {
@@ -288,6 +292,36 @@ const changeParentSerch = async (req, res) => {
     });
   }
 };
+const changeVolunteerStatus = async (req, res) => {
+  try {
+    const user = User.findById(req.params.id);
+    if (user) {
+      const result = await User.updateOne(
+        { _id: req.params.id },
+        {
+          $set: {
+            isVolunteer: req.body.isVolunteer,
+          },
+        }
+      );
+
+      res.status(200).send({
+        message: "status updated successfully!",
+        success: true,
+      });
+    } else {
+      res.status(401).send({
+        message: "There is no such user",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
 
 const resendActivationLink = async (req, res) => {
   try {
@@ -345,6 +379,70 @@ const changePassword = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    console.log(email, "emil");
+
+    const user = await User.findOne({ email: email });
+
+    console.log(user, "uss");
+
+    if (user) {
+      const result = await sendResetPassEmail({
+        email: email,
+        userId: user?._id,
+      });
+      res.status(200).send({
+        message: "Email sent successsfully!",
+        success: true,
+      });
+    } else {
+      res.status(401).send({
+        message: "User doesn't exists!",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { userId, password } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (user) {
+      const newPassword = bcrcypt.hashSync(password);
+
+      user.password = newPassword;
+
+      await user.save();
+
+      res.status(200).send({
+        message: "Password changed successfully!",
+        success: true,
+      });
+    } else {
+      res.status(201).send({
+        message: "User Not Found!",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   emailVirification,
@@ -357,4 +455,7 @@ module.exports = {
   resendActivationLink,
   changePassword,
   changeParentSerch,
+  resetPassword,
+  forgotPassword,
+  changeVolunteerStatus,
 };
