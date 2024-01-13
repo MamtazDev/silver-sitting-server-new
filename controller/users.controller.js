@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
     const isVerified = isExist?.isVerified;
     if (isExist && isVerified === true) {
       return res.status(403).send({
-        message: `${req.body.email} is already Exist!`,
+        message: `${req.body.email} does already exist!`,
         status: 403,
       });
     } else if (isExist && isVerified === false) {
