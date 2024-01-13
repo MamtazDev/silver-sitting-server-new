@@ -132,7 +132,7 @@ const editUser = async (req, res) => {
     firstName,
     lastName,
     postCode,
-    residence,
+    residance,
     gender,
     availability,
     offerProvide,
@@ -150,7 +150,7 @@ const editUser = async (req, res) => {
       user.firstName = firstName;
       user.lastName = lastName;
       user.postCode = postCode;
-      user.residance = residence;
+      user.residance = residance;
       user.streetOrHouseNumber = streetOrHouseNumber;
       user.gender = gender;
       user.availability = availability;

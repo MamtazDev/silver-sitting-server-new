@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema(
     },
     residance: {
       type: String,
-      required: true,
+      required: false,
     },
     streetOrHouseNumber: {
       type: String,
