@@ -1,11 +1,18 @@
 const Conversation = require("../models/conversation.model");
 
 const addConversationBySenderReciver = async (req, res) => {
+  const conversation = await Conversation.findOne({
+    members: { $all: [req.body.senderId, req.body.reciverId] },
+  });
+
   const newConversation = new Conversation({
     members: [req.body.senderId, req.body.reciverId],
   });
 
   try {
+    if (conversation) {
+      return res.status(201).send("Conversation exists!");
+    }
     const savedConversation = await newConversation.save();
     res.status(200).send(savedConversation);
   } catch (error) {
